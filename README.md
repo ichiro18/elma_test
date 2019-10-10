@@ -1,4 +1,4 @@
-![Experiment](src/common/images/logo.png)
+![Experiment](src/assets/images/logo.png)
 # Elma test
 > Development of the SPA from the test [task](https://docs.google.com/document/d/1QWDUlIsFgbmIWNiM1cTCR_cNe4H6UZKkIbw6YLE7E30/edit#)
 
