@@ -2,3 +2,19 @@
 @import "config/variables";
 @import "config/fonts";
 @import "config/vendor";
+
+// Common
+body {
+  font-size: 16px;
+  color: $text-primary-color;
+}
+
+.form-control {
+  color: $text-primary-color;
+  border-color: $text-secondary-color;
+  &:focus {
+    color: $text-primary-color;
+    border-color: $primary-color;
+    box-shadow: none;
+  }
+}

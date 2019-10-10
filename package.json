@@ -45,8 +45,10 @@
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "normalize.css": "^8.0.1",
+    "pretty-checkbox-vue": "^1.1.9",
     "roboto-fontface": "^0.10.0",
     "vue": "^2.6.10",
+    "vue-multiselect": "^2.1.6",
     "vuex": "^3.1.1"
   }
 }

@@ -2,7 +2,7 @@
   <div class="row todo">
     <div class="col-md-4 todo__list">
       <div class="list__header">
-        <select class="custom-select">
+        <select class="todo-filter">
           <option value="-1" selected>Все</option>
           <option value="1">Завершенные</option>
           <option value="2">Незавершенные</option>
@@ -10,10 +10,6 @@
       </div>
       <ul class="list-group list__items" v-if="todo.length">
         <li class="list-group-item list__item">Cras justo odio</li>
-        <li class="list-group-item list__item">Dapibus ac facilisis in</li>
-        <li class="list-group-item list__item">Morbi leo risus</li>
-        <li class="list-group-item list__item">Porta ac consectetur ac</li>
-        <li class="list-group-item list__item">Vestibulum at eros</li>
       </ul>
       <div class="list__items--empty" v-else>
         Нет задач
@@ -31,9 +27,22 @@
 
     <div class="col todo__detail">
       <div class="controls">
-        controls
+        <div class="control__item control--delete">
+          <i class="far fa-trash-alt"></i>
+        </div>
+        <div class="control__item control--member">
+          <i class="far fa-user"></i>
+        </div>
+        <div class="control__item control--delete">
+          <i class="far fa-check-square"></i>
+        </div>
       </div>
-      <todo-item :todo="selected" />
+      <todo-item
+        v-if="selected"
+        :todo="selected"
+        :members="members"
+        v-on:save="saveTodo"
+      />
     </div>
   </div>
 </template>
@@ -92,6 +101,9 @@ export default {
     createTodo() {
       this.selected = Object.assign({}, this.defaultTodo);
       this.selected.id = this.todo.length;
+    },
+    saveTodo() {
+      this.todo.push(this.selected);
     }
   }
 };
@@ -106,6 +118,17 @@ export default {
   .todo__list {
     display: flex;
     flex-direction: column;
+    padding: 0;
+    .list__header {
+      border-left: 3px solid $primary-color;
+      .todo-filter {
+        display: flex;
+        width: 100%;
+        height: 82px;
+        border: 1px solid $background-secondary-color;
+        border-radius: 0;
+      }
+    }
     .list__items {
       display: flex;
       flex-direction: column;
@@ -115,7 +138,35 @@ export default {
   }
 
   .todo__detail {
-    background: palegreen;
+    padding: 0;
+    .controls {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 20px 50px;
+      border-top: 1px solid $background-secondary-color;
+      border-bottom: 1px solid $background-secondary-color;
+      box-sizing: border-box;
+      .control__item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: $background-secondary-color;
+        color: $primary-color;
+        margin-left: 15px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+        &:hover {
+          cursor: pointer;
+          background-color: darken($background-secondary-color, 10);
+        }
+      }
+    }
   }
 }
 </style>
