@@ -30,10 +30,11 @@
         <div class="control__item control--delete">
           <i class="far fa-trash-alt"></i>
         </div>
-        <div class="control__item control--member">
-          <i class="far fa-user"></i>
-        </div>
-        <div class="control__item control--delete">
+        <div
+          class="control__item control--steps"
+          :class="{ active: showSteps }"
+          @click="toggleStepVisible"
+        >
           <i class="far fa-check-square"></i>
         </div>
       </div>
@@ -59,6 +60,7 @@ export default {
     return {
       todo: [],
       selected: null,
+      showSteps: false,
       defaultTodo: {
         id: 0,
         title: "",
@@ -104,6 +106,12 @@ export default {
     },
     saveTodo() {
       this.todo.push(this.selected);
+    },
+    toggleStepVisible() {
+      this.showSteps = !this.showSteps;
+    },
+    toggleMembersVisible() {
+      this.showSteps = !this.showSteps;
     }
   }
 };
@@ -143,7 +151,7 @@ export default {
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      padding: 20px 50px;
+      padding: 20px 30px;
       border-top: 1px solid $background-secondary-color;
       border-bottom: 1px solid $background-secondary-color;
       box-sizing: border-box;
@@ -164,6 +172,10 @@ export default {
         &:hover {
           cursor: pointer;
           background-color: darken($background-secondary-color, 10);
+        }
+        &.active {
+          background-color: $primary-color;
+          color: white;
         }
       }
     }
