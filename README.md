@@ -33,7 +33,11 @@ For transparency into the release cycle and in striving to maintain backward com
 For more information on SemVer, please visit http://semver.org/.
 
 ## TODO
-- [ ] VueJS SPA skeleton
+- [X] VueJS SPA skeleton
+- [X] CRUDL Todo List
+- [X] State behavior
+- [X] Vuex
+- [X] Drag & drop sort
 
 ## Authors
 Authors
