@@ -1,0 +1,99 @@
+// Config
+@import "config/variables";
+@import "config/fonts";
+@import "config/vendor";
+
+// Common
+body {
+  font-size: 16px;
+  color: $text-primary-color;
+}
+
+input,
+textarea {
+  min-height: 40px;
+}
+
+.form-control {
+  color: $text-primary-color;
+  border-color: $text-secondary-color;
+  &:focus {
+    color: $text-primary-color;
+    border-color: $primary-color;
+    box-shadow: none;
+  }
+  ::placeholder {
+    color: $text-secondary-color;
+  }
+}
+
+.multiselect {
+  color: $text-secondary-color;
+  .multiselect__select {
+    &:before {
+      color: $text-secondary-color;
+      border-color: $text-secondary-color transparent transparent;
+    }
+  }
+  .multiselect__tags {
+    border-color: $text-secondary-color;
+    .multiselect__input,
+    .multiselect__single {
+      &::placeholder {
+        color: $text-secondary-color;
+        font-size: inherit;
+      }
+    }
+    .multiselect__placeholder {
+      color: $text-secondary-color;
+    }
+  }
+  .multiselect__content-wrapper {
+    border-color: $text-secondary-color;
+    .multiselect__element {
+      .multiselect__option {
+        &--highlight {
+          background: $text-secondary-color;
+          outline: none;
+          color: $text-primary-color;
+
+          &:after {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            content: attr(data-select);
+            background: $text-secondary-color;
+            color: $text-primary-color;
+          }
+        }
+        &--selected {
+          background: #f3f3f3;
+          color: #35495e;
+          font-weight: bold;
+          &:after {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            content: attr(data-selected);
+            background: #f3f3f3;
+            color: silver;
+          }
+          &.multiselect__option--highlight {
+            background: $text-secondary-color;
+            outline: none;
+            color: $text-primary-color;
+
+            &:after {
+              display: flex;
+              align-items: center;
+              height: 100%;
+              content: attr(data-deselect);
+              background: $text-secondary-color;
+              color: $text-primary-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}

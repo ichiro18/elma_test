@@ -1,4 +1,0 @@
-//* Typography
-@function typography-get-letter-spacing($tracking, $font_size) {
-  @return $tracking / ($font_size * 16) * 1em;
-}
