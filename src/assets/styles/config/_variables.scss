@@ -1,14 +1,16 @@
 //  1. Colors
 // ------------------------------------------
 $primary-color: #4e78fe !default;
-$background-primary-color: #fff !default;
-$background-secondary-color: #eaedfc!default;
+$background-primary-color: #f1f2f780 !default;
+$background-secondary-color: #eaedfc !default;
 $text-primary-color: #24243e !default;
 $text-secondary-color: #888cb9 !default;
 
 //  2. Typography
 // ------------------------------------------
-$font-family-sans-serif: unquote("Roboto, Helvetica Neue, Arial, sans-serif") !default;
+$font-family-sans-serif: unquote(
+  "Roboto, Helvetica Neue, Arial, sans-serif"
+) !default;
 
 // 3. Customize vendor
 $pretty--color-default: $text-secondary-color;

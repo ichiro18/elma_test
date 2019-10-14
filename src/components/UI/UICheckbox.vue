@@ -3,6 +3,8 @@
     class="p-icon p-smooth"
     :class="{ 'p-round': round }"
     color="primary"
+    :checked="model"
+    @change="changeInput"
   >
     <i slot="extra" class="icon fa fa-check"></i>
     <template v-if="label">
@@ -16,7 +18,7 @@ export default {
   name: "UICheckbox",
   props: {
     model: {
-      type: Boolean || Object,
+      type: Boolean,
       required: true
     },
     round: {
@@ -24,6 +26,11 @@ export default {
       default: false
     },
     label: String
+  },
+  methods: {
+    changeInput(data) {
+      this.$emit("change", data);
+    }
   }
 };
 </script>

@@ -1,2 +1,2 @@
 // * Vendor
-import 'bootstrap';
+import "bootstrap";
