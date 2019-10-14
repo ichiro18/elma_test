@@ -1,4 +1,7 @@
 export default {
+  updateList(state, payload) {
+    state.todoList = payload;
+  },
   createTodo(state, payload) {
     state.todoList.push(payload);
   },

@@ -8,6 +8,7 @@ export default {
         { id: 2, name: "Ciri", avatar: "http://i.imgur.com/gqgKhi4.jpg" }
       ],
       created: 1571020425949,
+      order: 0,
       done: false
     },
     {
@@ -18,6 +19,7 @@ export default {
         { id: 2, name: "Ciri", avatar: "http://i.imgur.com/gqgKhi4.jpg" }
       ],
       created: 1571020451435,
+      order: 1,
       done: false
     },
     {
@@ -33,6 +35,7 @@ export default {
         }
       ],
       created: 1571020481199,
+      order: 2,
       done: true
     },
     {
@@ -52,6 +55,7 @@ export default {
         }
       ],
       created: 1571020554903,
+      order: 3,
       done: false
     }
   ],

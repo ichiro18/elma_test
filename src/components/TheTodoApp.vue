@@ -8,47 +8,57 @@
           <option value="1">Незавершенные</option>
         </select>
       </div>
-      <ul class="list-group list__items" v-if="!!filteredTodoList.length">
-        <li
-          class="list-group-item list__item"
-          v-for="(item, key) in filteredTodoList"
-          :key="key"
-          :class="{
-            completed: item.done,
-            selected: selected && item.id === selected.id
-          }"
-          @click="selectTodo(key)"
-        >
-          <div class="item__status">
-            <checkbox
-              :model="item.done"
-              round
-              @change="toggleCompleteTodo(item.id, $event)"
-            />
-          </div>
-          <div class="item__desc">
-            <span class="item__title">{{ item.title }}</span>
-            <div class="desc__content">
-              <span class="item__date">{{ parseDate(item.created) }}</span>
-              <span class="item__steps" v-if="!!item.content.steps.length">
-                <i class="far fa-check-square"></i>
-                {{ getStepStatus(item) }}
-              </span>
+      <draggable
+        v-if="!!todoList.length"
+        class="list-group list__items"
+        tag="ul"
+        v-model="todoList"
+        v-bind="dragOptions"
+        @start="drag = true"
+        @end="drag = false"
+      >
+        <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+          <li
+            class="list-group-item list__item"
+            v-for="(item, key) in filteredTodoList"
+            :key="item.order"
+            :class="{
+              completed: item.done,
+              selected: selected && item.id === selected.id
+            }"
+            @click="selectTodo(key)"
+          >
+            <div class="item__status">
+              <checkbox
+                :model="item.done"
+                round
+                @change="toggleCompleteTodo(item.id, $event)"
+              />
             </div>
-          </div>
-          <div class="item item__members">
-            <img
-              v-for="(member, index) in item.members"
-              :key="index"
-              :src="member.avatar"
-              class="member__item rounded-circle"
-              :style="{ zIndex: item.members.length - index }"
-              :alt="member.name"
-              :title="member.name"
-            />
-          </div>
-        </li>
-      </ul>
+            <div class="item__desc">
+              <span class="item__title">{{ item.title }}</span>
+              <div class="desc__content">
+                <span class="item__date">{{ parseDate(item.created) }}</span>
+                <span class="item__steps" v-if="!!item.content.steps.length">
+                  <i class="far fa-check-square"></i>
+                  {{ getStepStatus(item) }}
+                </span>
+              </div>
+            </div>
+            <div class="item item__members">
+              <img
+                v-for="(member, index) in item.members"
+                :key="index"
+                :src="member.avatar"
+                class="member__item rounded-circle"
+                :style="{ zIndex: item.members.length - index }"
+                :alt="member.name"
+                :title="member.name"
+              />
+            </div>
+          </li>
+        </transition-group>
+      </draggable>
       <div class="list__items--empty" v-else>
         Нет задач
       </div>
@@ -151,6 +161,7 @@
 </template>
 
 <script>
+import draggable from "vuedraggable";
 import TheTodoItem from "@project_src/components/TheTodoItem.vue";
 import UICheckbox from "@project_src/components/UI/UICheckbox.vue";
 
@@ -158,7 +169,8 @@ export default {
   name: "TheTodoApp",
   components: {
     todoItem: TheTodoItem,
-    checkbox: UICheckbox
+    checkbox: UICheckbox,
+    draggable
   },
   data() {
     return {
@@ -182,12 +194,18 @@ export default {
       },
       filter: -1,
       editMode: false,
-      tempIndex: null
+      tempIndex: null,
+      drag: false
     };
   },
   computed: {
-    todoList() {
-      return this.$store.state.todoList;
+    todoList: {
+      get() {
+        return this.$store.state.todoList;
+      },
+      set(val) {
+        this.$store.commit("updateList", val);
+      }
     },
     members() {
       return this.$store.state.members;
@@ -215,6 +233,14 @@ export default {
         return "edit";
       }
       return "read";
+    },
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      };
     }
   },
   methods: {
@@ -238,6 +264,9 @@ export default {
       const count = todo.content.steps.length;
       const completed = todo.content.steps.filter(item => item.done).length;
       return `${completed}/${count}`;
+    },
+    sort() {
+      this.list = this.list.sort((a, b) => a.order - b.order);
     },
     // * CRUD
     createTodo() {

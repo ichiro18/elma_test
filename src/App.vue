@@ -25,5 +25,8 @@ export default {
 .hero {
   padding: 30px 0;
   text-align: center;
+  h1 {
+    margin-top: 10px;
+  }
 }
 </style>
