@@ -1,86 +1,133 @@
 <template>
-  <div class="todo__item">
-    <h3 class="item__title" v-if="mode === 'new'">
-      Добавить задачу
-    </h3>
-    <h3 class="item__title" v-if="mode === 'edit'">
-      Изменить задачу
-    </h3>
-    <div class="item__header">
-      <checkbox :model="todo.done" round @change="changeStatus" />
-      <input
-        v-if="mode !== 'read'"
-        class="form-control"
-        type="text"
-        placeholder="Заголовок"
-        v-model="todo.title"
-      />
-      <div class="title__block" v-else>
-        <span class="title"> {{ todo.title }}</span>
-        <span class="date">
-          <i class="far fa-clock"></i> {{ parseDate(todo.created) }}</span
-        >
-      </div>
-    </div>
-    <div class="item__content">
-      <textarea
-        v-if="mode !== 'read'"
-        class="form-control"
-        placeholder="Текст задачи"
-        v-model="todo.content.text"
-      ></textarea>
-      <p v-else v-text="todo.content.text"></p>
-    </div>
-    <h4 class="item__subtitle">Участники</h4>
-    <div class="item__members">
-      <multiselect
-        v-if="mode !== 'read'"
-        v-model="todo.members"
-        placeholder="Выберите участников"
-        label="name"
-        track-by="id"
-        :options="members"
-        multiple
-      >
-        <template slot="tag" slot-scope="props">
-          <div class="member__tag">
-            <img
-              class="tag__image rounded-circle"
-              :src="props.option.avatar"
-              :alt="props.option.name"
-            />
-            <div class="tag__desc">
-              <span class="tag__title">{{ props.option.name }}</span>
-            </div>
-          </div>
-        </template>
-        <template slot="option" slot-scope="props">
-          <div class="member__option">
-            <img
-              class="option__image rounded-circle"
-              :src="props.option.avatar"
-              :alt="props.option.name"
-            />
-            <div class="option__desc">
-              <span class="option__title">{{ props.option.name }}</span>
-            </div>
-          </div>
-        </template>
-      </multiselect>
-      <div class="members__list" v-else>
-        <img
-          v-for="(member, index) in todo.members"
-          :key="index"
-          :src="member.avatar"
-          class="member__item rounded-circle"
-          :alt="member.name"
-          :title="member.name"
+  <div class="todo__item" v-if="todo">
+    <section class="main">
+      <h3 class="item__title" v-if="mode === 'new'">
+        Добавить задачу
+      </h3>
+      <h3 class="item__title" v-if="mode === 'edit'">
+        Изменить задачу
+      </h3>
+      <div class="item__header">
+        <checkbox :model="todo.done" round @change="changeStatus" />
+        <input
+          v-if="mode !== 'read'"
+          class="form-control"
+          type="text"
+          placeholder="Заголовок"
+          v-model="todo.title"
         />
+        <div class="title__block" v-else>
+          <h3 class="title">{{ todo.title }}</h3>
+          <span class="date">
+            <i class="far fa-clock"></i> {{ parseDate(todo.created) }}</span
+          >
+        </div>
       </div>
-    </div>
+      <div class="item__content">
+        <textarea
+          v-if="mode !== 'read'"
+          class="form-control"
+          placeholder="Текст задачи"
+          v-model="todo.content.text"
+        ></textarea>
+        <p v-else v-text="todo.content.text"></p>
+      </div>
+    </section>
+    <section class="steps" v-if="showSteps || todo.content.steps.length">
+      <h4 class="item__subtitle">Этапы</h4>
+      <ul class="item__steps">
+        <li
+          v-for="(step, key) in todo.content.steps"
+          class="step__item"
+          :key="key"
+        >
+          <template v-if="mode !== 'read'">
+            <checkbox
+              :model="step.done"
+              @change="changeStepStatus(step.id, $event)"
+            />
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Название этапа"
+              v-model="step.name"
+            />
+            <i
+              class="far fa-trash-alt control__icon"
+              @click="deleteStep(step.id)"
+            ></i>
+          </template>
+
+          <checkbox
+            v-else
+            :model="step.done"
+            :label="step.name"
+            @change="changeStepStatus(step.id, $event)"
+          />
+        </li>
+        <button
+          v-if="mode !== 'read'"
+          type="button"
+          class="btn btn-outline-primary submit__button"
+          @click="createStep"
+        >
+          Создать этап
+        </button>
+      </ul>
+    </section>
+    <section class="members">
+      <h4 class="item__subtitle">Участники</h4>
+      <div class="item__members">
+        <multiselect
+          v-if="mode !== 'read'"
+          v-model="todo.members"
+          placeholder="Выберите участников"
+          label="name"
+          track-by="id"
+          :options="members"
+          multiple
+        >
+          <template slot="tag" slot-scope="props">
+            <div class="member__tag">
+              <img
+                class="tag__image rounded-circle"
+                :src="props.option.avatar"
+                :alt="props.option.name"
+              />
+              <div class="tag__desc">
+                <span class="tag__title">{{ props.option.name }}</span>
+              </div>
+            </div>
+          </template>
+          <template slot="option" slot-scope="props">
+            <div class="member__option">
+              <img
+                class="option__image rounded-circle"
+                :src="props.option.avatar"
+                :alt="props.option.name"
+              />
+              <div class="option__desc">
+                <span class="option__title">{{ props.option.name }}</span>
+              </div>
+            </div>
+          </template>
+        </multiselect>
+        <div class="members__list" v-else>
+          <img
+            v-for="(member, index) in todo.members"
+            :key="index"
+            :src="member.avatar"
+            class="member__item rounded-circle"
+            :alt="member.name"
+            :title="member.name"
+          />
+        </div>
+      </div>
+    </section>
     <button
+      v-if="mode !== 'read'"
       type="button"
-      class="btn btn-outline-primary submit__button"
+      class="btn btn-primary submit__button"
       @click="save"
     >
       Сохранить
@@ -100,11 +147,21 @@ export default {
       type: String,
       default: "read"
     },
-    members: Array
+    members: Array,
+    showSteps: Boolean
   },
   components: {
     checkbox: UICheckbox,
     Multiselect
+  },
+  data() {
+    return {
+      defaultStep: {
+        id: 0,
+        name: "",
+        done: false
+      }
+    };
   },
   methods: {
     parseDate(timestamp) {
@@ -114,7 +171,34 @@ export default {
       this.$emit("save", this.todo);
     },
     changeStatus(data) {
-      this.$emit("change", data);
+      if (this.mode === "read") {
+        this.$emit("change", data);
+      }
+    },
+    changeStepStatus(id, value) {
+      const step = this.todo.content.steps.find(item => item.id === id);
+      if (step) {
+        step.done = value;
+      }
+    },
+    createStep() {
+      const newStep = Object.assign({}, this.defaultStep);
+      newStep.id = this.todo.content.steps.length;
+      this.todo.content.steps.push(newStep);
+    },
+    deleteStep(id) {
+      const stepIndex = this.todo.content.steps.findIndex(
+        item => item.id === id
+      );
+      if (stepIndex >= 0) {
+        this.todo.content.steps.splice(stepIndex, 1);
+        this.refreshStepIDs();
+      }
+    },
+    refreshStepIDs() {
+      this.todo.content.steps.forEach((val, key) => {
+        if (val.id !== key) val.id = key;
+      });
     }
   }
 };
@@ -216,6 +300,38 @@ export default {
 
         &:last-child {
           margin-right: 0;
+        }
+      }
+    }
+  }
+
+  .item__steps {
+    list-style: none;
+
+    .step__item {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 10px;
+
+      .pretty {
+        margin-right: 10px;
+        label {
+          font-weight: lighter;
+        }
+      }
+
+      .form-control {
+        max-width: 80%;
+      }
+
+      .control__icon {
+        margin-left: 10px;
+        color: $text-secondary-color;
+
+        &:hover {
+          cursor: pointer;
+          color: $primary-color;
         }
       }
     }

@@ -3,7 +3,6 @@ export default {
     {
       id: 0,
       title: "Продумать структуру",
-      type: "simple",
       content: { text: "Нужно определить структуру", steps: [] },
       members: [
         { id: 2, name: "Ciri", avatar: "http://i.imgur.com/gqgKhi4.jpg" }
@@ -14,7 +13,6 @@ export default {
     {
       id: 1,
       title: "Набросать скелет",
-      type: "simple",
       content: { text: "Разработать скелет приложения", steps: [] },
       members: [
         { id: 2, name: "Ciri", avatar: "http://i.imgur.com/gqgKhi4.jpg" }
@@ -25,7 +23,6 @@ export default {
     {
       id: 2,
       title: "Сверстать компоненты",
-      type: "simple",
       content: { text: "Сделать верстку компонентов", steps: [] },
       members: [
         {
@@ -36,12 +33,11 @@ export default {
         }
       ],
       created: 1571020481199,
-      done: false
+      done: true
     },
     {
       id: 3,
       title: "Переходы состояний",
-      type: "simple",
       content: {
         text:
           "Продумать, разработать и отладить переходы состояний между компонентами",
